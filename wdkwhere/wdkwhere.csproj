@@ -1,0 +1,41 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+    <PropertyGroup>
+        <OutputType>Exe</OutputType>
+        <TargetFramework>net8.0</TargetFramework>
+        <ImplicitUsings>enable</ImplicitUsings>
+        <Nullable>enable</Nullable>
+    </PropertyGroup>
+
+    <PropertyGroup>
+        <MinVerTagPrefix>v</MinVerTagPrefix>
+    </PropertyGroup>
+
+    <PropertyGroup>
+        <Authors>Benjamin Höglinger-Stelzer</Authors>
+        <Company>Nefarius Software Solutions e.U.</Company>
+        <PackageLicenseExpression>MIT</PackageLicenseExpression>
+        <Copyright>(C) 2020-2024 Benjamin Höglinger-Stelzer</Copyright>
+        <Description>Scripting utility to find the Windows SDK installation path.</Description>
+        <PackageProjectUrl>https://github.com/nefarius/wdkwhere</PackageProjectUrl>
+        <PackageIcon>favicon.png</PackageIcon>
+        <PackageIconUrl/>
+        <RepositoryUrl>https://github.com/nefarius/wdkwhere</RepositoryUrl>
+        <ToolCommandName>wdkwhere</ToolCommandName>
+        <PackAsTool>true</PackAsTool>
+        <IsPackable>true</IsPackable>
+        <PackageId>Nefarius.Tools.WDKWhere</PackageId>
+        <IncludeSymbols>true</IncludeSymbols>
+        <SymbolPackageFormat>snupkg</SymbolPackageFormat>
+        <PublishRepositoryUrl>true</PublishRepositoryUrl>
+    </PropertyGroup>
+
+    <ItemGroup>
+        <PackageReference Include="CommandLineParser" Version="2.9.1"/>
+        <PackageReference Include="MinVer" Version="6.0.0">
+            <PrivateAssets>all</PrivateAssets>
+            <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+        </PackageReference>
+    </ItemGroup>
+
+</Project>
