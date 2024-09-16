@@ -32,7 +32,7 @@ Parser.Default.ParseArguments<Options>(args)
 
         if (versions.Count == 0)
         {
-            Console.Error.WriteLine("No installed root registry key found.");
+            Console.Error.WriteLine("No versions registry key found.");
             return;
         }
 
