@@ -1,4 +1,6 @@
-﻿using CommandLine;
+﻿using System.Runtime.InteropServices;
+
+using CommandLine;
 
 using Microsoft.Win32;
 
@@ -7,6 +9,12 @@ using Nefarius.Tools.WDKWhere;
 Parser.Default.ParseArguments<Options>(args)
     .WithParsed(o =>
     {
+        if (!RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
+        {
+            Console.Error.WriteLine("This tool is only useful on Windows.");
+            return;
+        }
+        
         RegistryKey? installedRoots =
             Registry.LocalMachine.OpenSubKey(@"SOFTWARE\Microsoft\Windows Kits\Installed Roots");
 
