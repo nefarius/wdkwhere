@@ -23,6 +23,11 @@ await parserResult
 
         string commandPath = Path.Combine(opts.AbsolutePath, opts.Filename);
 
+        if (!Path.HasExtension(commandPath))
+        {
+            commandPath = $"{commandPath}.exe";
+        }
+
         if (!File.Exists(commandPath))
         {
             Console.Error.WriteLine($"Path {commandPath} for command not found.");
