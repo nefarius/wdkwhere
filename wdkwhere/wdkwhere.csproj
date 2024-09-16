@@ -12,6 +12,14 @@
         <MinVerTagPrefix>v</MinVerTagPrefix>
     </PropertyGroup>
 
+    <ItemGroup>
+        <None Include="$(SolutionDir)assets\NSS-128x128.png">
+            <Pack>True</Pack>
+            <PackagePath></PackagePath>
+        </None>
+        <None Include="$(SolutionDir)README.md" Pack="true" PackagePath="\"/>
+    </ItemGroup>
+
     <PropertyGroup>
         <Authors>Benjamin Höglinger-Stelzer</Authors>
         <Company>Nefarius Software Solutions e.U.</Company>
@@ -29,6 +37,11 @@
         <IncludeSymbols>true</IncludeSymbols>
         <SymbolPackageFormat>snupkg</SymbolPackageFormat>
         <PublishRepositoryUrl>true</PublishRepositoryUrl>
+
+        <!-- Package Icon -->
+        <PackageIcon>NSS-128x128.png</PackageIcon>
+        <PackageIconUrl/>
+        <PackageReadmeFile>README.md</PackageReadmeFile>
     </PropertyGroup>
 
     <ItemGroup>
