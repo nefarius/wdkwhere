@@ -6,6 +6,29 @@
 
 CLI tool that resolves Windows SDK installation paths.
 
+## Motivation
+
+> *This meeting could've been an email!*
+
+And this tool could've been a shell script 😅
+
+## Installation
+
+```PowerShell
+dotnet tool install --global Nefarius.Tools.WDKWhere
+```
+
+## Usage examples
+
+Calling `wdkwhere` without arguments simply returns the `bin` directory for the latest local WDK version and the current
+operating system architecture (most likely `X64`):
+
+```PowerShell
+PS C:\Users\Administrator> wdkwhere
+C:\Program Files (x86)\Windows Kits\10\Bin\10.0.22621.0\X64
+PS C:\Users\Administrator>
+```
+
 ## 3rd party credits
 
 - [CliWrap](https://github.com/Tyrrrz/CliWrap)
