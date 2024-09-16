@@ -10,7 +10,14 @@ CLI tool that resolves Windows SDK installation paths.
 
 > *This meeting could've been an email!*
 
-And this tool could've been a shell script 😅
+And this tool could've been a shell script 😅 `wdkwhere` was inspired by [
+`vswhere`](https://github.com/microsoft/vswhere) but for locating
+the [Windows SDK](https://developer.microsoft.com/en-us/windows/downloads/windows-sdk/) installation folders instead.
+The SDK hosts quite a few nifty everyday developer binaries like `signtool` which by default are not easily invokable on
+the Terminal or in scripts since their respective directories are all not added to e.g. the `PATH` environment variable.
+
+Granted, this could be somewhat automated via registry queries in PowerShell or even the CMD, or Python/VBS scripts and
+alike, but why not use a nice language like C# and make it a dotnet tool instead!
 
 ## Installation
 
