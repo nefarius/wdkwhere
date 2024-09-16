@@ -11,9 +11,20 @@ namespace Nefarius.Tools.WDKWhere;
 internal enum SubDirectory
 {
     Bin,
+    Build,
+    CoreSystem,
+    CrossCertificates,
+    Include,
+    Lib,
+    Licenses,
+    Manifests,
     Tools
 }
 
+/// <summary>
+///     Common options shared across all commands.
+/// </summary>
+[SuppressMessage("ReSharper", "MemberCanBePrivate.Global")]
 internal abstract class GlobalOptions
 {
     [Option("version", HelpText = "Looks for a specific WDK version (e.g. \"10.0.22621.0\").")]
@@ -89,19 +100,31 @@ internal abstract class GlobalOptions
     }
 }
 
+/// <summary>
+///     The default verb that just prints the absolute installation path on success.
+/// </summary>
 [SuppressMessage("ReSharper", "ClassNeverInstantiated.Global")]
 [Verb("query", true, HelpText = "Query the WDK path.")]
 internal sealed class QueryOptions : GlobalOptions
 {
 }
 
+/// <summary>
+///     Runs an application within the WDK directory and optional supplied arguments.
+/// </summary>
 [Verb("run", HelpText = "Run the program with the specified filename and arguments.")]
 [SuppressMessage("ReSharper", "ClassNeverInstantiated.Global")]
 internal sealed class RunOptions : GlobalOptions
 {
+    /// <summary>
+    ///     The relative program filename including extension.
+    /// </summary>
     [Value(0, MetaName = "filename", HelpText = "The filename to process.", Required = true)]
     public required string Filename { get; set; }
 
+    /// <summary>
+    ///     Optional command line arguments for <see cref="Filename"/>.
+    /// </summary>
     [Value(1, MetaName = "arguments", HelpText = "Additional CLI arguments.", Required = false)]
     public IEnumerable<string>? Arguments { get; set; }
 }
