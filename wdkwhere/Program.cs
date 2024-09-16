@@ -1,20 +1,22 @@
 ﻿using System.Runtime.InteropServices;
 
+using CliWrap;
+
 using CommandLine;
 
 using Microsoft.Win32;
 
 using Nefarius.Tools.WDKWhere;
 
-Parser.Default.ParseArguments<Options>(args)
-    .WithParsed(o =>
+await Parser.Default.ParseArguments<Options>(args)
+    .WithParsedAsync(async o =>
     {
         if (!RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
         {
             Console.Error.WriteLine("This tool is only useful on Windows.");
             return;
         }
-        
+
         RegistryKey? installedRoots =
             Registry.LocalMachine.OpenSubKey(@"SOFTWARE\Microsoft\Windows Kits\Installed Roots");
 
@@ -47,7 +49,7 @@ Parser.Default.ParseArguments<Options>(args)
         Version? latestVersion = o.Version is null
             ? versions.First()
             : versions.SingleOrDefault(v => v == o.Version);
-        
+
         if (latestVersion is null)
         {
             Console.Error.WriteLine("No matching version found.");
@@ -63,5 +65,36 @@ Parser.Default.ParseArguments<Options>(args)
             return;
         }
 
+        // run a WDK application and mirror stdout, stderr and exit code
+        if (!string.IsNullOrEmpty(o.RunCommand))
+        {
+            string commandPath = Path.Combine(absolutePath, o.RunCommand);
+
+            if (!File.Exists(commandPath))
+            {
+                Console.Error.WriteLine($"Path {commandPath} for command not found.");
+                return;
+            }
+
+            await using Stream stdOut = Console.OpenStandardOutput();
+            await using Stream stdErr = Console.OpenStandardError();
+
+            Command cmd = Cli.Wrap(commandPath)
+                              .WithValidation(CommandResultValidation.None)
+                              .WithWorkingDirectory(absolutePath)
+                          | (stdOut, stdErr);
+
+            if (o.RunCommandArguments is not null)
+            {
+                cmd.WithArguments(o.RunCommandArguments);
+            }
+
+            CommandResult result = await cmd.ExecuteAsync();
+
+            Environment.ExitCode = result.ExitCode;
+            return;
+        }
+
+        // default is to output the computed path
         Console.WriteLine(absolutePath);
     });
