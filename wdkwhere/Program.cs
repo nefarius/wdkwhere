@@ -1,3 +1,51 @@
-﻿// See https://aka.ms/new-console-template for more information
+﻿using CommandLine;
 
-Console.WriteLine("Hello, World!");
+using Microsoft.Win32;
+
+using Nefarius.Tools.WDKWhere;
+
+Parser.Default.ParseArguments<Options>(args)
+    .WithParsed(o =>
+    {
+        RegistryKey? installedRoots =
+            Registry.LocalMachine.OpenSubKey(@"SOFTWARE\Microsoft\Windows Kits\Installed Roots");
+
+        if (installedRoots is null)
+        {
+            Console.Error.WriteLine("No installed root registry key found.");
+            return;
+        }
+
+        string? kitsRoot10 = installedRoots.GetValue("KitsRoot10") as string;
+
+        if (string.IsNullOrEmpty(kitsRoot10))
+        {
+            Console.Error.WriteLine("KitsRoot10 registry value not found.");
+            return;
+        }
+
+        List<Version> versions = installedRoots.GetSubKeyNames()
+            .Select(name => Version.TryParse(name, out Version? version) ? version : null)
+            .Where(v => v is not null)
+            .OrderByDescending(v => v)
+            .ToList()!;
+
+        if (versions.Count == 0)
+        {
+            Console.Error.WriteLine("No installed root registry key found.");
+            return;
+        }
+
+        Version latestVersion = versions.First();
+
+        string absolutePath = Path.Combine(kitsRoot10, o.SubDirectory.ToString(), latestVersion.ToString(),
+            o.Architecture.ToString());
+
+        if (!Directory.Exists(absolutePath))
+        {
+            Console.Error.WriteLine($"Path {absolutePath} not found.");
+            return;
+        }
+
+        Console.WriteLine(absolutePath);
+    });
