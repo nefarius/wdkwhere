@@ -36,7 +36,15 @@ Parser.Default.ParseArguments<Options>(args)
             return;
         }
 
-        Version latestVersion = versions.First();
+        Version? latestVersion = o.Version is null
+            ? versions.First()
+            : versions.SingleOrDefault(v => v == o.Version);
+        
+        if (latestVersion is null)
+        {
+            Console.Error.WriteLine("No matching version found.");
+            return;
+        }
 
         string absolutePath = Path.Combine(kitsRoot10, o.SubDirectory.ToString(), latestVersion.ToString(),
             o.Architecture.ToString());
