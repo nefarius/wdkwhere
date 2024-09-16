@@ -5,3 +5,9 @@
 [![Nuget](https://img.shields.io/nuget/dt/Nefarius.Tools.WDKWhere)](https://www.nuget.org/packages/Nefarius.Tools.WDKWhere/)
 
 CLI tool that resolves Windows SDK installation paths.
+
+## 3rd party credits
+
+- [CliWrap](https://github.com/Tyrrrz/CliWrap)
+- [Command Line Parser Library for CLR and NetStandard](https://github.com/commandlineparser/commandline)
+- [MinVer](https://github.com/adamralph/minver)
