@@ -1,100 +1,48 @@
-﻿using System.Runtime.InteropServices;
-
-using CliWrap;
+﻿using CliWrap;
 
 using CommandLine;
 
-using Microsoft.Win32;
-
 using Nefarius.Tools.WDKWhere;
 
-await Parser.Default.ParseArguments<Options>(args)
-    .WithParsedAsync(async o =>
+Parser parser = new(with => with.HelpWriter = Console.Out);
+
+ParserResult<object>? parserResult = parser.ParseArguments<QueryOptions, RunOptions>(args);
+
+// First check global options
+await parserResult
+    .WithParsed<QueryOptions>(opts =>
     {
-        if (!RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
+        Console.WriteLine(opts.AbsolutePath);
+    })
+    .WithParsedAsync<RunOptions>(async opts =>
+    {
+        if (string.IsNullOrEmpty(opts.AbsolutePath))
         {
-            Console.Error.WriteLine("This tool is only useful on Windows.");
+            throw new InvalidOperationException("Missing absolute path.");
+        }
+
+        string commandPath = Path.Combine(opts.AbsolutePath, opts.Filename);
+
+        if (!File.Exists(commandPath))
+        {
+            Console.Error.WriteLine($"Path {commandPath} for command not found.");
             return;
         }
 
-        RegistryKey? installedRoots =
-            Registry.LocalMachine.OpenSubKey(@"SOFTWARE\Microsoft\Windows Kits\Installed Roots");
+        await using Stream stdOut = Console.OpenStandardOutput();
+        await using Stream stdErr = Console.OpenStandardError();
 
-        if (installedRoots is null)
+        Command cmd = Cli.Wrap(commandPath)
+                          .WithValidation(CommandResultValidation.None)
+                          .WithWorkingDirectory(opts.AbsolutePath)
+                      | (stdOut, stdErr);
+
+        if (opts.Arguments is not null)
         {
-            Console.Error.WriteLine("No installed root registry key found.");
-            return;
+            cmd = cmd.WithArguments(opts.Arguments);
         }
 
-        string? kitsRoot10 = installedRoots.GetValue("KitsRoot10") as string;
+        CommandResult result = await cmd.ExecuteAsync();
 
-        if (string.IsNullOrEmpty(kitsRoot10))
-        {
-            Console.Error.WriteLine("KitsRoot10 registry value not found.");
-            return;
-        }
-
-        List<Version> versions = installedRoots.GetSubKeyNames()
-            .Select(name => Version.TryParse(name, out Version? version) ? version : null)
-            .Where(v => v is not null)
-            .OrderByDescending(v => v)
-            .ToList()!;
-
-        if (versions.Count == 0)
-        {
-            Console.Error.WriteLine("No versions registry key found.");
-            return;
-        }
-
-        Version? latestVersion = o.Version is null
-            ? versions.First()
-            : versions.SingleOrDefault(v => v == o.Version);
-
-        if (latestVersion is null)
-        {
-            Console.Error.WriteLine("No matching version found.");
-            return;
-        }
-
-        string absolutePath = Path.Combine(kitsRoot10, o.SubDirectory.ToString(), latestVersion.ToString(),
-            o.Architecture.ToString());
-
-        if (!Directory.Exists(absolutePath))
-        {
-            Console.Error.WriteLine($"Path {absolutePath} not found.");
-            return;
-        }
-
-        // run a WDK application and mirror stdout, stderr and exit code
-        if (!string.IsNullOrEmpty(o.RunCommand))
-        {
-            string commandPath = Path.Combine(absolutePath, o.RunCommand);
-
-            if (!File.Exists(commandPath))
-            {
-                Console.Error.WriteLine($"Path {commandPath} for command not found.");
-                return;
-            }
-
-            await using Stream stdOut = Console.OpenStandardOutput();
-            await using Stream stdErr = Console.OpenStandardError();
-
-            Command cmd = Cli.Wrap(commandPath)
-                              .WithValidation(CommandResultValidation.None)
-                              .WithWorkingDirectory(absolutePath)
-                          | (stdOut, stdErr);
-
-            if (o.RunCommandArguments is not null)
-            {
-                cmd.WithArguments(o.RunCommandArguments);
-            }
-
-            CommandResult result = await cmd.ExecuteAsync();
-
-            Environment.ExitCode = result.ExitCode;
-            return;
-        }
-
-        // default is to output the computed path
-        Console.WriteLine(absolutePath);
+        Environment.Exit(result.ExitCode);
     });
