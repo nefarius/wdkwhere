@@ -27,6 +27,8 @@ dotnet tool install --global Nefarius.Tools.WDKWhere
 
 ## Usage examples
 
+To display the help text and see all available flags run either `wdkwhere query --help` or `wdkwhere run --help`.
+
 ### Basic usage
 
 Calling `wdkwhere` without arguments simply returns the `bin` directory for the latest local WDK version and the current
