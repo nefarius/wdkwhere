@@ -1,5 +1,6 @@
 # <img src="assets/NSS-128x128.png" align="left" />Nefarius.Tools.WDKWhere
 
+[![.NET](https://github.com/nefarius/wdkwhere/actions/workflows/build.yml/badge.svg)](https://github.com/nefarius/wdkwhere/actions/workflows/build.yml)
 ![Requirements](https://img.shields.io/badge/Requires-.NET%208.0-blue.svg)
 [![Nuget](https://img.shields.io/nuget/v/Nefarius.Tools.WDKWhere)](https://www.nuget.org/packages/Nefarius.Tools.WDKWhere/)
 [![Nuget](https://img.shields.io/nuget/dt/Nefarius.Tools.WDKWhere)](https://www.nuget.org/packages/Nefarius.Tools.WDKWhere/)
