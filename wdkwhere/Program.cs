@@ -6,7 +6,7 @@ using Nefarius.Tools.WDKWhere;
 
 Parser parser = new(with => with.HelpWriter = Console.Out);
 
-ParserResult<object>? parserResult = parser.ParseArguments<QueryOptions, RunOptions>(args);
+ParserResult<object>? parserResult = parser.ParseArguments<QueryOptions, RunOptions, OpenOptions>(args);
 
 // First check global options
 await parserResult
@@ -51,3 +51,16 @@ await parserResult
 
         Environment.Exit(result.ExitCode);
     });
+
+await parserResult.WithParsedAsync<OpenOptions>(async options =>
+{
+    if (string.IsNullOrEmpty(options.AbsolutePath))
+    {
+        throw new InvalidOperationException("Missing absolute path.");
+    }
+
+    await Cli.Wrap("explorer")
+        .WithValidation(CommandResultValidation.None)
+        .WithArguments(options.AbsolutePath)
+        .ExecuteAsync();
+});

@@ -27,7 +27,10 @@ dotnet tool install --global Nefarius.Tools.WDKWhere
 
 ## Usage examples
 
-To display the help text and see all available flags run either `wdkwhere query --help` or `wdkwhere run --help`.
+To display the help text and see all available flags run either
+- `wdkwhere query --help` or
+- `wdkwhere run --help` or
+- `wdkwhere open --help`
 
 ### Basic usage
 

@@ -128,3 +128,12 @@ internal sealed class RunOptions : GlobalOptions
     [Value(1, MetaName = "arguments", HelpText = "Additional CLI arguments.", Required = false)]
     public IEnumerable<string>? Arguments { get; set; }
 }
+
+/// <summary>
+///     Opens the WDK path in explorer.
+/// </summary>
+[SuppressMessage("ReSharper", "ClassNeverInstantiated.Global")]
+[Verb("open", HelpText = "Opens the WDK path in explorer.")]
+internal sealed class OpenOptions : GlobalOptions
+{
+}
