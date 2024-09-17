@@ -69,6 +69,6 @@ try
 }
 catch (Exception ex)
 {
-    Console.Error.WriteLine(ex.Message);
+    Console.Error.WriteLine($"Error: {ex.Message}");
     Environment.Exit(1);
 }
