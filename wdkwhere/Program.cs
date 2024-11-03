@@ -41,7 +41,7 @@ try
 
             Command cmd = Cli.Wrap(commandPath)
                               .WithValidation(CommandResultValidation.None)
-                              .WithWorkingDirectory(opts.AbsolutePath)
+                              .WithWorkingDirectory(Directory.GetCurrentDirectory())
                           | (stdOut, stdErr);
 
             if (opts.Arguments is not null)
