@@ -40,11 +40,15 @@ try
                 return;
             }
 
+            string[] originalArgs = Environment.GetCommandLineArgs();
+            string[] runCmdArgs = originalArgs.Skip(3).ToArray();
+
             await using Stream stdOut = Console.OpenStandardOutput();
             await using Stream stdErr = Console.OpenStandardError();
 
             Command cmd = Cli.Wrap(commandPath)
                               .WithValidation(CommandResultValidation.None)
+                              .WithArguments(runCmdArgs)
                               .WithWorkingDirectory(Directory.GetCurrentDirectory())
                           | (stdOut, stdErr);
 
