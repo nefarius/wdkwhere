@@ -7,7 +7,7 @@ using Nefarius.Tools.WDKWhere;
 Parser parser = new(with =>
 {
     with.HelpWriter = Console.Out;
-    with.CaseInsensitiveEnumValues = true;
+    with.IgnoreUnknownArguments = true;
 });
 
 ParserResult<object>? parserResult = parser.ParseArguments<QueryOptions, RunOptions, OpenOptions>(args);
