@@ -48,13 +48,12 @@ try
 
             Command cmd = Cli.Wrap(commandPath)
                               .WithValidation(CommandResultValidation.None)
-                              .WithArguments(runCmdArgs)
                               .WithWorkingDirectory(Directory.GetCurrentDirectory())
                           | (stdOut, stdErr);
 
-            if (opts.Arguments is not null)
+            if (runCmdArgs.Length != 0)
             {
-                cmd = cmd.WithArguments(opts.Arguments);
+                cmd = cmd.WithArguments(runCmdArgs);
             }
 
             CommandResult result = await cmd.ExecuteAsync();

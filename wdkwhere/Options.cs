@@ -121,12 +121,6 @@ internal sealed class RunOptions : GlobalOptions
     /// </summary>
     [Value(0, MetaName = "filename", HelpText = "The filename to process.", Required = true)]
     public required string Filename { get; set; }
-
-    /// <summary>
-    ///     Optional command line arguments for <see cref="Filename"/>.
-    /// </summary>
-    [Value(1, MetaName = "arguments", HelpText = "Additional CLI arguments.", Required = false)]
-    public IEnumerable<string>? Arguments { get; set; }
 }
 
 /// <summary>
