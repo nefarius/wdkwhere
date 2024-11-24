@@ -125,7 +125,7 @@ internal sealed class RunOptions : GlobalOptions
     /// <summary>
     ///     Optional command line arguments for <see cref="Filename"/>.
     /// </summary>
-    [Value(1, Min = 0, MetaName = "arguments", HelpText = "Additional CLI arguments.", Required = false)]
+    [Value(1, MetaName = "arguments", HelpText = "Additional CLI arguments.", Required = false)]
     public IEnumerable<string>? Arguments { get; set; }
 }
 
