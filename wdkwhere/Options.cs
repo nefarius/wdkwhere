@@ -27,8 +27,8 @@ internal enum SubDirectory
 [SuppressMessage("ReSharper", "MemberCanBePrivate.Global")]
 internal abstract class GlobalOptions
 {
-    [Option("version", HelpText = "Looks for a specific WDK version (e.g. \"10.0.22621.0\").")]
-    public Version? Version { get; set; } = null;
+    [Option("build", HelpText = "Looks for a specific WDK build version (e.g. \"10.0.22621.0\").")]
+    public Version? Build { get; set; } = null;
 
     [Option("subdir", HelpText = "The subdirectory within the SDK root.")]
     public SubDirectory SubDirectory { get; set; } = SubDirectory.Bin;
@@ -74,9 +74,9 @@ internal abstract class GlobalOptions
                 throw new InvalidOperationException("No versions registry key found.");
             }
 
-            Version? latestVersion = Version is null
+            Version? latestVersion = Build is null
                 ? versions.First()
-                : versions.SingleOrDefault(v => v == Version);
+                : versions.SingleOrDefault(v => v == Build);
 
             if (latestVersion is null)
             {
