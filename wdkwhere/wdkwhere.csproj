@@ -8,6 +8,7 @@
         <RootNamespace>Nefarius.Tools.WDKWhere</RootNamespace>
         <OutputPath>$(SolutionDir)bin\</OutputPath>
         <LangVersion>latest</LangVersion>
+        <RollForward>LatestMajor</RollForward>
     </PropertyGroup>
 
     <PropertyGroup>
